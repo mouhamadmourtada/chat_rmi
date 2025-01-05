@@ -1,0 +1,46 @@
+<project name ="ChatInterfaces" default="all" basedir=".">
+    
+        <property name="src.dir" value="src"/>
+        <property name="bin.dir" value="bin"/>
+        <property name="doc.dir" value="doc"/>
+        <property name="archive.dir" value="archive"/>
+        <property name ="fileName.jar" value="ChatInterfaces.jar" /> 
+    
+        <target name ="init">
+            <mkdir dir="${bin.dir}"/>
+            <mkdir dir="${doc.dir}"/>
+            <mkdir dir="${archive.dir}"/>
+        </target>
+    
+        <target name ="compile">
+            <javac srcdir="${src.dir}" destdir="${bin.dir}"/>
+        </target>
+    
+        
+        <target name="doc">
+            <javadoc sourcepath="${src.dir}" destdir="${doc.dir}">
+                <fileset dir="${src.dir}">
+                    <include name="**/*.java"/>
+                </fileset>
+            </javadoc>
+        </target>
+
+        <target name ="archive">
+            <jar destfile="${archive.dir}/${fileName.jar}" basedir="${bin.dir}"/>
+        </target>
+
+
+        <target name ="clean">
+            <delete dir="${bin.dir}"/>
+            <!-- <delete dir="${src.dir}"/> -->
+
+        </target>
+
+        <target name ="all">
+            <antcall target="init"/>
+            <antcall target="compile"/>
+            <antcall target="doc"/>
+            <antcall target="archive"/>
+            <!-- <antcall target="clean"/> -->
+        </target>
+</project>

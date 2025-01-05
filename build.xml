@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="chat-rmi" default="all" basedir=".">
+    
+    <!-- Propriétés globales -->
+    <property name="interfaces.src" location="interfaces/src"/>
+    <property name="interfaces.bin" location="interfaces/bin"/>
+    <property name="server.src" location="server/src"/>
+    <property name="server.bin" location="server/bin"/>
+    <property name="client.src" location="client/src"/>
+    <property name="client.bin" location="client/bin"/>
+    <property name="lib.dir" location="lib"/>
+    
+    <!-- Création des dossiers -->
+    <target name="init">
+        <mkdir dir="${interfaces.bin}"/>
+        <mkdir dir="${server.bin}"/>
+        <mkdir dir="${client.bin}"/>
+        <mkdir dir="${lib.dir}"/>
+        <mkdir dir="server/lib"/>
+        <mkdir dir="client/lib"/>
+    </target>
+
+    <!-- Nettoyage -->
+    <target name="clean">
+        <delete dir="${interfaces.bin}"/>
+        <delete dir="${server.bin}"/>
+        <delete dir="${client.bin}"/>
+        <delete dir="${lib.dir}"/>
+        <delete dir="server/lib"/>
+        <delete dir="client/lib"/>
+    </target>
+
+    <!-- Compilation des interfaces -->
+    <target name="compile-interfaces" depends="init">
+        <javac srcdir="${interfaces.src}" destdir="${interfaces.bin}" includeantruntime="false"/>
+    </target>
+
+    <!-- Création du JAR des interfaces -->
+    <target name="jar-interfaces" depends="compile-interfaces">
+        <jar destfile="${lib.dir}/ChatInterfaces.jar" basedir="${interfaces.bin}"/>
+        <copy file="${lib.dir}/ChatInterfaces.jar" todir="server/lib"/>
+        <copy file="${lib.dir}/ChatInterfaces.jar" todir="client/lib"/>
+    </target>
+
+    <!-- Compilation du serveur -->
+    <target name="compile-server" depends="jar-interfaces">
+        <javac srcdir="${server.src}" destdir="${server.bin}" includeantruntime="false">
+            <classpath>
+                <fileset dir="server/lib">
+                    <include name="**/*.jar"/>
+                </fileset>
+            </classpath>
+        </javac>
+    </target>
+
+    <!-- Création du JAR du serveur -->
+    <target name="jar-server" depends="compile-server">
+        <jar destfile="server/lib/ChatServer.jar" basedir="${server.bin}">
+            <manifest>
+                <attribute name="Main-Class" value="Serveur"/>
+                <attribute name="Class-Path" value="ChatInterfaces.jar"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <!-- Compilation du client -->
+    <target name="compile-client" depends="jar-interfaces">
+        <javac srcdir="${client.src}" destdir="${client.bin}" includeantruntime="false">
+            <classpath>
+                <fileset dir="client/lib">
+                    <include name="**/*.jar"/>
+                </fileset>
+            </classpath>
+        </javac>
+    </target>
+
+    <!-- Création du JAR du client -->
+    <target name="jar-client" depends="compile-client">
+        <jar destfile="client/lib/ChatClient.jar" basedir="${client.bin}">
+            <manifest>
+                <attribute name="Main-Class" value="Client"/>
+                <attribute name="Class-Path" value="ChatInterfaces.jar"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <!-- Target principal qui compile tout -->
+    <target name="all" depends="clean, jar-interfaces, jar-server, jar-client"/>
+
+</project>
