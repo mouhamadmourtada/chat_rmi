@@ -78,7 +78,7 @@
     <target name="jar-client" depends="compile-client">
         <jar destfile="client/lib/ChatClient.jar" basedir="${client.bin}">
             <manifest>
-                <attribute name="Main-Class" value="Client"/>
+                <attribute name="Main-Class" value="ChatClient"/>
                 <attribute name="Class-Path" value="ChatInterfaces.jar"/>
             </manifest>
         </jar>

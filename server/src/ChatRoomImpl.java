@@ -26,7 +26,7 @@ public class ChatRoomImpl implements ChatRoom {
     public void postMessage(String pseudo, String message) {
         clients.forEach(client -> {
             try {
-                client.displayMessage(message);
+                client.displayMessage(pseudo + " : " + message);
             } catch (RemoteException e) {
                 e.printStackTrace();
             }

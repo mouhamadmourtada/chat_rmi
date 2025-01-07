@@ -1,23 +1,21 @@
-import java.io.Serializable;
+import java.rmi.RemoteException;
 
-public class ChatUserImpl implements ChatUser, Serializable {
-    private static final long serialVersionUID = 1L; // Ensure this is consistent
-    
-    private final String pseudo;
+public class ChatUserImpl implements ChatUser {
+    private String pseudo;
+    private ChatClient client;
 
-    public ChatUserImpl(String pseudo) {
+    public ChatUserImpl(ChatClient client, String pseudo) {
+        this.client = client;
         this.pseudo = pseudo;
     }
 
     @Override
-    public void displayMessage(String message) {
-        System.out.println(pseudo + " : " + message);
+    public void displayMessage(String message) throws RemoteException {
+        client.receiveMessage(message);
     }
 
-    // @Override
-    public String getPseudo() {
+    @Override
+    public String getPseudo() throws RemoteException {
         return pseudo;
     }
-
-    
 }
