@@ -87,4 +87,24 @@
     <!-- Target principal qui compile tout -->
     <target name="all" depends="clean, jar-interfaces, jar-server, jar-client"/>
 
+    <target name="server" depends="jar-server">
+        <java jar="server/lib/ChatServer.jar" fork="true">
+            <classpath>
+                <fileset dir="server/lib">
+                    <include name="*.jar"/>
+                </fileset>
+            </classpath>
+        </java>
+    </target>
+
+    <target name="client" depends="jar-client">
+        <java jar="client/lib/ChatClient.jar" fork="true">
+            <classpath>
+                <fileset dir="client/lib">
+                    <include name="*.jar"/>
+                </fileset>
+            </classpath>
+        </java>
+    </target>
+
 </project>
